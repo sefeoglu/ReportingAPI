@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+<script type="text/javascript">
+(function(){
+    'use strict';
+	var $ = jQuery;
+	$.fn.extend({
+		filterTable: function(){
+			return this.each(function(){
+				$(this).on('keyup', function(e){
+					$('.filterTable_no_results').remove();
+					var $this = $(this), 
+                        search = $this.val().toLowerCase(), 
+                        target = $this.attr('data-filters'), 
+                        $target = $(target), 
+                        $rows = $target.find('tbody tr');
+                        
+					if(search == '') {
+						$rows.show(); 
+					} else {
+						$rows.each(function(){
+							var $this = $(this);
+							$this.text().toLowerCase().indexOf(search) === -1 ? $this.hide() : $this.show();
+						})
+						if($target.find('tbody tr:visible').size() === 0) {
+							var col_count = $target.find('tr').first().find('td').size();
+							var no_results = $('<tr class="filterTable_no_results"><td colspan="'+col_count+'">No results found</td></tr>')
+							$target.find('tbody').append(no_results);
+						}
+					}
+				});
+			});
+		}
+	});
+	$('[data-action="filter"]').filterTable();
+})(jQuery);
+
+$(function(){
+    // attach table filter plugin to inputs
+	$('[data-action="filter"]').filterTable();
+	
+	$('.container').on('click', '.panel-heading span.filter', function(e){
+		var $this = $(this), 
+			$panel = $this.parents('.panel');
+		
+		$panel.find('.panel-body').slideToggle();
+		if($this.css('display') != 'none') {
+			$panel.find('.panel-body input').focus();
+		}
+	});
+	$('[data-toggle="tooltip"]').tooltip();
+})
+</script>
+<style type="text/css">
+(function(){
+    'use strict';
+	var $ = jQuery;
+	$.fn.extend({
+		filterTable: function(){
+			return this.each(function(){
+				$(this).on('keyup', function(e){
+					$('.filterTable_no_results').remove();
+					var $this = $(this), 
+                        search = $this.val().toLowerCase(), 
+                        target = $this.attr('data-filters'), 
+                        $target = $(target), 
+                        $rows = $target.find('tbody tr');
+                        
+					if(search == '') {
+						$rows.show(); 
+					} else {
+						$rows.each(function(){
+							var $this = $(this);
+							$this.text().toLowerCase().indexOf(search) === -1 ? $this.hide() : $this.show();
+						})
+						if($target.find('tbody tr:visible').size() === 0) {
+							var col_count = $target.find('tr').first().find('td').size();
+							var no_results = $('<tr class="filterTable_no_results"><td colspan="'+col_count+'">No results found</td></tr>')
+							$target.find('tbody').append(no_results);
+						}
+					}
+				});
+			});
+		}
+	});
+	$('[data-action="filter"]').filterTable();
+})(jQuery);
+
+$(function(){
+    // attach table filter plugin to inputs
+	$('[data-action="filter"]').filterTable();
+	
+	$('.container').on('click', '.panel-heading span.filter', function(e){
+		var $this = $(this), 
+			$panel = $this.parents('.panel');
+		
+		$panel.find('.panel-body').slideToggle();
+		if($this.css('display') != 'none') {
+			$panel.find('.panel-body input').focus();
+		}
+	});
+	$('[data-toggle="tooltip"]').tooltip();
+})
+</style>
+<title>Transaction List</title>
+</head>
+<body>
+<h3>Transaction List</h3>
+	<form action="/transaction/list" method="post">
+		<table>
+			<tr>
+			</tr>
+			<tr><td>From Date:
+			<input type="Date" th:field="*{transaction.fromDate}"/>
+			</td></tr>
+			<tr> <td>To Date
+				<input type ="Date" th:field="*{transaction.toDate}"/>
+			</td></tr>
+			<tr><td>Status:
+				<select name="status" th:field="*{transaction.status}">
+					<option value=""></option>
+					<option value="APPROVED">APPROVED</option>
+					<option value="WAITING">WAITING</option>
+					<option value="DECLINED">DECLINED</option>
+					<option value="ERROR">ERROR</option>
+				</select>
+			</td></tr>
+			<tr><td> Operation :
+			<select name="operation" th:field="*{transaction.operation}">
+				<option value=""></option>
+				<option value="DIRECT">DIRECT</option>
+				<option value="REFUND">REFUND</option>
+				<option value="3D">3D</option>
+				<option value="3DAUTH">3DAUTH</option>
+				<option value="STORED">STORED</option>
+			</select>
+			</td></tr>
+			<tr><td>
+				<label>Merchant Id:<input type="number"
+					th:field="*{transaction.merchantId}"/></label>
+			</td></tr>
+
+			<tr><td>
+			<label>Acquire Id:<input type="number"
+				th:field="*{transaction.acquirerId}"/></label>
+
+			</td></tr>
+			<tr><td>
+				<label>Payment Method: <select name="status"
+					th:field="*{transaction.paymentMethod}">
+						<option value=""></option>
+						<option value="CREDITCARD">CREDITCARD</option>
+						<option value="CUP">CUP</option>
+						<option value="IDEAL">IDEAL</option>
+						<option value="GIROPAY">GIROPAY</option>
+						<option value="MISTERCASH">MISTERCASH</option>
+						<option value="STORED">STORED</option>
+						<option value="PAYTOCARD">PAYTOCARD</option>
+				</select>
+				</label>
+
+			</td></tr>
+			<tr><td>
+				<label>Error Code: <select name="status"
+					th:field="*{transaction.errorCode}">
+						<option value=""></option>
+						<option value=""></option>
+						<option value=""></option>
+						<option value=""></option>
+				</select>
+				</label>
+
+			</td></tr>
+			<tr><td>
+				<label>Filter Field: <select name="status"
+					th:field="*{transaction.filterField}">
+						<option value="Transaction UUID">Transaction UUID</option>
+						<option value="Customer Email">Customer Email</option>
+						<option value="Reference No">Reference No</option>
+						<option value="Custom Data">Custom Data</option>
+						<option value="Card PAN">Card PAN</option>
+				</select>
+				</label>
+
+			</td></tr>
+			<tr><td>
+				<label>Filter Value: <input type="text"
+					th:field="*{transaction.filterValue}" />
+				</label>
+
+			</td></tr>
+			<tr><td>
+				<label>Page: <input type="number"
+					th:field="*{transaction.page}" />
+				</label>
+
+			</td>
+			</tr>
+			<tr th:each=" tok: ${token}"><td><input type="hidden" th:value="${tok.getToken()}" name="token" /></td></tr>
+			<tr><td><input type="submit" value="Gönder"/></td></tr>
+		</table>
+	
+		<div class="container">
+    	<div class="row">
+			<div class="col-md-6">
+				<div class="panel panel-success">
+					<div class="panel-heading">
+						<h3 class="panel-title">Transactions</h3>
+					</div>
+					<table class="table table-hover" id="task-table">
+						<thead>
+							<tr>
+								<th>FX: Original Amount</th>
+								<th>FX: Original Currency</th>
+								<th>Customer Email</th>
+								<th>Customer BillingFirstName</th>
+								<th>Acquirer of Name</th>
+								<th>Acquirer of Code</th>
+								<th>Merchant Name</th>
+								<th>Merchant Id</th>
+								<th>Reference No</th>
+								<th>Status</th>
+								<th>Transaction</th>
+								<th>Merchant</th>
+								<th>Client</th>
+							</tr>
+						</thead>
+						
+						<tr th:each ="trans : ${transactionlist}">
+							<tr th:each = "data :${trans.getData()}">
+									<td th:if="${data.getFx()}!=null" th:text = "${data.getFx().getFxMerchant().getOriginalCurrency()}" name ="transactionlist">Original Currency</td>
+									<td th:if="${data.getFx()}!=null" th:text = "${data.getFx().getFxMerchant().getOriginalAmount()}"  name ="transactionlist">Original Amount</td>
+									<td th:if="${data.getCustomerInfo()}!=null" th:text = "${data.getCustomerInfo().getEmail()}" name="transactionlist"> Email</td>
+ 									<td th:if="${data.getCustomerInfo()}!=null" th:text = "${data.getCustomerInfo().getBillingFirstName()}" name ="transactionlist">Billing First Name</td>
+									<td th:if="${data.getAcquirer()}!= null" th:text = "${data.getAcquirer().getName()}" name ="transactionlist">Name</td>
+									<td th:if="${data.getAcquirer()}!=null" th:text = "${data.getAcquirer().getCode()}" name ="transactionlist">Code</td>
+									<td th:if="${data.getMerchant()}!=null" th:text = "${data.getMerchant().getName()}"  name ="transactionlist">Name</td>
+									<td th:if="${data.getMerchant()}!=null" th:text = "${data.getMerchant().getId()}"  name ="transactionlist">Id</td>
+									<td th:if="${data.getTransaction()}!=null" th:text = "${data.getTransaction().getMerchant().getReferenceNo()}"  name ="transactionlist">Reference No</td>
+									<td th:if="${data.getTransaction()}!=null"  th:text = "${data.getTransaction().getMerchant().getStatus()}"  name ="transactionlist">Status</td>
+									<form action="/transaction" method="post">
+									<td th:each=" tok: ${token}"><input type="hidden" th:value="${tok.getToken()}" name="token" />
+									<td th:if="${data.getTransaction()}!=null" th:value="${data.getTransaction().getMerchant().getTransactionId()}" name ="transactionRequest"><input type="submit" value="Detail"/></td>
+									</td>
+									</form>
+									
+									<td><a th:if="${data.getMerchant()}!=null" th:href="@{/merchant/} + ${data.getMerchant().getId()}">Merchant</a></td>
+									
+									<td><a th:if="${data.getCustomerInfo()}!=null" th:href="@{/client/} + ${data.getCustomerInfo().getId()}">Client</a></td>
+									
+								</tr>
+								<tr>
+									<td th:text="${trans.getPerPage()}">Per Page</td>
+									<td th:text="${trans.getFrom()}">From</td>
+									<td th:text="${trans.getTo()}">To</td>
+									
+								</tr>
+								<tr>
+									<td><a th:if="${trans.getCurrentPage()}!=null AND ${trans.getCurrentPage() }>1" th:href="@{/transaction/list/} +${trans.getCurrentPage()}-1">previous</a></td>
+									<td><a th:if="${trans.getCurrentPage() }!=null" th:href="@{/transaction/list/} +${trans.getCurrentPage()}">current</a></td>
+									<td><a th:if="${trans.getCurrentPage() }!=null" th:href="@{/transaction/list/} +${trans.getCurrentPage()}+1">next</a></td>
+								</tr>
+						</tr>		
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	</form>
+</body>
+</html>

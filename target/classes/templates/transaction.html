@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+<script type="text/javascript">
+.row{
+    margin-top:40px;
+    padding: 0 10px;
+}
+.clickable{
+    cursor: pointer;   
+}
+
+.panel-heading div {
+	margin-top: -18px;
+	font-size: 15px;
+}
+.panel-heading div span{
+	margin-left:5px;
+}
+.panel-body{
+	display: none;
+}
+</script>
+<style type="text/css">
+    	.row{
+		    margin-top:40px;
+		    padding: 0 10px;
+		}
+		.clickable{
+		    cursor: pointer;   
+		}
+
+		.panel-heading div {
+			margin-top: -18px;
+			font-size: 15px;
+		}
+		.panel-heading div span{
+			margin-left:5px;
+		}
+		.panel-body{
+			display: none;
+		}
+</style>
+<title>Transaction Detail Page</title>
+</head>
+<body>
+<h3>Transaction Detail Page</h3>
+	<div class="col-md-6">
+				<div class="panel panel-success">
+					<div class="panel-heading">
+						<h3 class="panel-title">Tasks</h3>
+						<div class="pull-right">
+							<span class="clickable filter" data-toggle="tooltip" title="Toggle table filter" data-container="body">
+								<i class="glyphicon glyphicon-filter"></i>
+							</span>
+						</div>
+					</div>
+					<div class="panel-body">
+						<input type="text" class="form-control" id="task-table-filter" data-action="filter" data-filters="#task-table" placeholder="Filter Tasks" />
+					</div>
+					<table class="table table-hover" id="task-table">
+						<thead>
+								<tr>
+								<th>FX: Original Amount</th>
+								<th>FX: Original Currency</th>
+								<th>Customer Email</th>
+								<th>Customer BillingFirstName</th>
+								<th>Acquirer of Name</th>
+								<th>Acquirer of Code</th>
+								<th>Merchant Name</th>
+								<th>Merchant Id</th>
+								<th>Reference No</th>
+								<th>Status</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each = "trans :${transaction}">
+									<td th:if="${trans.getFxResponce()}!=null" th:text = "${trans.getFxResponce().getFxMerchant().getOriginalCurrency()}" name ="transactionlist">Original Currency</td>
+									<td th:if="${trans.getFxResponce()}!=null" th:text = "${trans.getFxResponce().getFxMerchant().getOriginalAmount()}"  name ="transactionlist">Original Amount</td>
+									<td th:if="${trans.getCustomerInfo()}!=null" th:text = "${trans.getCustomerInfo().getEmail()}" name="transactionlist"> Email</td>
+ 									<td th:if="${trans.getCustomerInfo()}!=null" th:text = "${trans.getCustomerInfo().getBillingFirstName()}" name ="transactionlist">Billing First Name</td>
+									<td th:if="${trans.getAcquirer()}!= null" th:text = "${trans.getAcquirer().getName()}" name ="transactionlist">Name</td>
+									<td th:if="${trans.getAcquirer()}!=null" th:text = "${trans.getAcquirer().getCode()}" name ="transactionlist">Code</td>
+									<td th:if="${trans.getMerchant()}!=null" th:text = "${trans.getMerchant().getName()}"  name ="transactionlist">Name</td>
+									<td th:if="${trans.getMerchant()}!=null" th:text = "${trans.getMerchant().getId()}"  name ="transactionlist">Id</td>
+									<td th:if="${trans.getMerchantTransaction() }!=null" th:text = "${trans.getMerchantTransaction().getReferenceNo()}"  name ="transactionlist">Reference No</td>
+									<td th:if="${trans.getMerchantTransaction() }!=null"  th:text = "${trans.getMerchantTransaction().getStatus()}"  name ="transactionlist">Status</td>
+									</tr>
+							
+						</tbody>
+					</table>
+				</div>
+			</div>
+</body>
+</html>
